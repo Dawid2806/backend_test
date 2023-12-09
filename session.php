@@ -1,9 +1,9 @@
 <?php
-require_once 'db_config.php'; // Załóżmy, że tutaj masz połączenie z bazą danych
-require_once './vendor/autoload.php'; // Autoload dla bibliotek Composer, np. dla firebase/php-jwt
+require_once 'db_config.php';
+require_once './vendor/autoload.php';
 
 use Firebase\JWT\JWT;
-use Firebase\JWT\Key; // Import klasy Key
+use Firebase\JWT\Key;
 
 class Session
 {
@@ -13,7 +13,7 @@ class Session
     public function __construct($db)
     {
         $this->db = $db;
-        $this->key = "2S5JuxOxYpPzVpSVP-utovOHaFNTmJT0Viqfx8H03fg"; // Zaktualizowany klucz
+        $this->key = "2S5JuxOxYpPzVpSVP-utovOHaFNTmJT0Viqfx8H03fg";
     }
 
     public function createJwt($userId)
@@ -21,7 +21,7 @@ class Session
         $payload = [
             "user_id" => $userId,
         ];
-        $alg = 'HS256'; // Wybierz algorytm, np. HS256
+        $alg = 'HS256';
         return JWT::encode($payload, $this->key, $alg);
     }
 
@@ -30,7 +30,7 @@ class Session
     {
         try {
             $decoded = JWT::decode($token, new Key($this->key, 'HS256'));
-            return $decoded; // Zwróć dekodowany token
+            return $decoded;
         } catch (\Firebase\JWT\ExpiredException $e) {
             error_log("Token wygasł: " . $e->getMessage());
         } catch (\Firebase\JWT\SignatureInvalidException $e) {
